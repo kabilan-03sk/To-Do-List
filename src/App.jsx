@@ -47,6 +47,15 @@ function App() {
   const deleteTodo = (id) => {
     setTodos(todos.filter(todo => todo.id !== id))
   }
+  const editTodo = (id, newText) => {
+    setTodos(todos.map(todo =>
+      todo.id === id ? { ...todo, text: newText } : todo
+    ))
+  }
+
+  const totalCount = todos.length
+  const completedCount = todos.filter(t => t.completed).length
+  const pendingCount = totalCount - completedCount
 
   return (
     <>
@@ -63,6 +72,31 @@ function App() {
           </button>
         </div>
 
+        {/* Stats Section - Displays task counts */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          <div
+            className="dark:bg-blue-900/20 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-blue-900/50 flex flex-col items-center justify-center transition-all hover:shadow-md"
+            style={{ backgroundColor: darkMode ? undefined : 'white' }}
+          >
+            <p className="text-sm font-semibold text-gray-500 dark:text-blue-300 uppercase tracking-wider text-[10px] mb-1">Total</p>
+            <p className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">{totalCount}</p>
+          </div>
+          <div
+            className="dark:bg-green-900/20 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-green-900/50 flex flex-col items-center justify-center transition-all hover:shadow-md"
+            style={{ backgroundColor: darkMode ? undefined : 'white' }}
+          >
+            <p className="text-sm font-semibold text-gray-500 dark:text-green-300 uppercase tracking-wider text-[10px] mb-1">Done</p>
+            <p className="text-3xl font-extrabold text-green-600 dark:text-green-400">{completedCount}</p>
+          </div>
+          <div
+            className="dark:bg-orange-900/20 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-orange-900/50 flex flex-col items-center justify-center transition-all hover:shadow-md"
+            style={{ backgroundColor: darkMode ? undefined : 'white' }}
+          >
+            <p className="text-sm font-semibold text-gray-500 dark:text-orange-300 uppercase tracking-wider text-[10px] mb-1">Pending</p>
+            <p className="text-3xl font-extrabold text-orange-500 dark:text-orange-400">{pendingCount}</p>
+          </div>
+        </div>
+
         <TodoForm addTodo={addTodo} />
         <div className="space-y-2">
           {todos.map(todo => (
@@ -71,6 +105,7 @@ function App() {
               todo={todo}
               toggleTodo={toggleTodo}
               deleteTodo={deleteTodo}
+              editTodo={editTodo}
             />
           ))}
           {todos.length === 0 && (
